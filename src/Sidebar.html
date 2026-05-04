@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:          #0d0b08;
+      --surface:     #141210;
+      --surface-2:   #1e1b15;
+      --surface-3:   #252119;
+      --border:      #2c2820;
+      --border-soft: #221f18;
+      --gold:        #c8a44a;
+      --gold-dim:    #7a6330;
+      --gold-muted:  #4a3c1e;
+      --text:        #ddd4c0;
+      --text-muted:  #6e6455;
+      --text-dim:    #3d3830;
+      --green:       #4a7a55;
+      --green-bg:    #141f17;
+      --red:         #8a3a32;
+      --red-bg:      #1f1212;
+      --star-on:     #c8a44a;
+      --star-off:    #2c2820;
+      --status-on:   #4ade80;
+      --status-off:  #f87171;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .main-content { flex: 1; }
+
+    /* ── Header ──────────────────────────────────────────────────────────── */
+
+    .header {
+      padding: 12px 16px 11px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: relative;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .header-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+
+    .header-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      margin-bottom: 1px;
+      flex-shrink: 0;
+    }
+
+    .header-sub {
+      font-size: 8.5px;
+      color: var(--text-muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* Status dot */
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--text-dim);
+      flex-shrink: 0;
+      transition: background 0.4s ease;
+    }
+
+    .status-dot.online {
+      background: var(--status-on);
+      box-shadow: 0 0 5px rgba(74, 222, 128, 0.5);
+      animation: pulse-green 2.5s ease-in-out infinite;
+    }
+
+    .status-dot.offline {
+      background: var(--status-off);
+      box-shadow: 0 0 5px rgba(248, 113, 113, 0.4);
+    }
+
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 5px rgba(74, 222, 128, 0.5); }
+      50%       { box-shadow: 0 0 10px rgba(74, 222, 128, 0.9); }
+    }
+
+    .status-label {
+      font-size: 8px;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Greeting + clock row */
+    .header-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-greeting {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .header-greeting .username {
+      color: var(--gold);
+      font-style: normal;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-color: var(--gold-muted);
+      text-underline-offset: 2px;
+    }
+
+    .header-greeting .username:hover { color: #d4b058; }
+
+    .live-clock {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      text-align: right;
+    }
+
+    .live-clock .clock-time {
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+
+    /* ── Tab Navigation ──────────────────────────────────────────────────── */
+
+    .tab-nav {
+      display: flex;
+      gap: 7px;
+      padding: 10px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-pill {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      text-align: center;
+    }
+
+    .tab-pill:hover { color: var(--text); border-color: var(--gold-muted); }
+
+    .tab-pill.active {
+      background: var(--gold-muted);
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
+
+    /* ── Tab Panels ──────────────────────────────────────────────────────── */
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Section shell ───────────────────────────────────────────────────── */
+
+    .section {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 9px;
+    }
+
+    /* ── Collapsible Config ──────────────────────────────────────────────── */
+
+    .config-toggle {
+      width: 100%;
+      background: var(--surface);
+      border: none;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 8.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      transition: color 0.15s;
+    }
+
+    .config-toggle:hover { color: var(--text); }
+
+    .config-arrow {
+      font-size: 10px;
+      transition: transform 0.2s ease;
+      color: var(--gold-dim);
+    }
+
+    .config-toggle.open .config-arrow { transform: rotate(180deg); }
+
+    .config-body {
+      display: none;
+      padding: 12px 16px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .config-body.open { display: block; }
+
+    /* ── Form elements ───────────────────────────────────────────────────── */
+
+    input[type="password"],
+    input[type="text"],
+    textarea {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 3px;
+      padding: 8px 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      resize: none;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type="password"]:focus,
+    input[type="text"]:focus,
+    textarea:focus { border-color: var(--gold-dim); }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 3px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
+    }
+
+    .btn-primary { background: var(--gold); color: #0d0b08; }
+    .btn-primary:hover:not(:disabled) { background: #d4b058; }
+    .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .btn-ghost {
+      background: var(--surface-2);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover:not(:disabled) { color: var(--text); border-color: var(--gold-dim); }
+
+    .btn-save {
+      background: transparent;
+      color: var(--gold-dim);
+      border: 1px solid var(--border);
+      margin-top: 8px;
+    }
+
+    .btn-save:hover { color: var(--gold); border-color: var(--gold-dim); }
+
+    /* ── Quick Action Grid ───────────────────────────────────────────────── */
+
+    .qa-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .qa-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 3px;
+      padding: 10px 10px 9px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 500;
+      text-align: left;
+      transition: all 0.15s;
+      line-height: 1.35;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .qa-btn::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--gold-muted);
+      transition: background 0.15s;
+    }
+
+    /* Academic mode buttons get a blue-toned accent */
+    .qa-btn.academic::before { background: #1e3a5a; }
+    .qa-btn.academic:hover::before { background: #4a90c4; }
+    .qa-btn.academic:hover { border-color: #2a5a8a; color: #7ab8e8; }
+
+    .qa-btn:hover {
+      border-color: var(--gold-dim);
+      background: var(--surface-3);
+      color: var(--gold);
+    }
+
+    .qa-btn:hover::before { background: var(--gold); }
+    .qa-btn:active { transform: scale(0.98); }
+
+    .qa-icon  { display: block; font-size: 15px; margin-bottom: 5px; line-height: 1; }
+    .qa-label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; }
+    .qa-hint  { display: block; font-size: 9px; color: var(--text-muted); margin-top: 2px; font-style: italic; font-weight: 400; }
+
+    /* ── Divider ─────────────────────────────────────────────────────────── */
+
+    .or-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      color: var(--text-dim);
+      font-size: 8.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .or-divider::before, .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Loader ──────────────────────────────────────────────────────────── */
+
+    .loader {
+      display: none;
+      text-align: center;
+      padding: 14px 16px 2px;
+      color: var(--gold-dim);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .loader.active { display: block; }
+
+    .loader-dots::after {
+      content: '';
+      animation: dots 1.5s infinite steps(4, end);
+    }
+
+    @keyframes dots {
+      0%   { content: ''; }
+      25%  { content: '.'; }
+      50%  { content: '..'; }
+      75%  { content: '...'; }
+      100% { content: ''; }
+    }
+
+    /* ── Output ──────────────────────────────────────────────────────────── */
+
+    .output-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      line-height: 1.75;
+      color: var(--text);
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 11px 12px;
+    }
+
+    .output-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      margin-top: 9px;
+    }
+
+    .status-tag {
+      display: inline-block;
+      margin-top: 7px;
+      padding: 3px 9px;
+      border-radius: 2px;
+      font-size: 9px;
+      letter-spacing: 0.09em;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .tag-success { background: var(--green-bg); color: #5a9a68; border: 1px solid #1e3324; }
+    .tag-error   { background: var(--red-bg);   color: #b06050; border: 1px solid #3a1a18; }
+
+    /* ── Counter bar ─────────────────────────────────────────────────────── */
+
+    .counter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .counter-label { font-size: 9px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .counter-right { display: flex; align-items: center; gap: 8px; }
+    .counter-val   { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--gold); font-weight: 500; }
+    .counter-sub   { font-size: 8.5px; color: var(--text-dim); }
+
+    /* ── Footer ──────────────────────────────────────────────────────────── */
+
+    .footer {
+      padding: 9px 16px;
+      background: var(--surface);
+      text-align: center;
+    }
+
+    .footer-text { font-size: 9px; color: var(--text-dim); letter-spacing: 0.06em; }
+    .footer-text .heart { color: #8a3a3a; }
+    .footer-text .name  { color: var(--gold-dim); font-weight: 600; }
+
+    /* ── Toast Notification ──────────────────────────────────────────────── */
+    /* Replaces browser alert() for the "No Selection" guard */
+
+    .toast {
+      position: fixed;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1a1208;
+      border: 1px solid var(--gold-muted);
+      border-radius: 4px;
+      padding: 10px 16px;
+      font-size: 11px;
+      color: var(--text);
+      text-align: center;
+      white-space: nowrap;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      max-width: 290px;
+      white-space: normal;
+      line-height: 1.4;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-icon { font-size: 13px; margin-right: 5px; }
+
+    /* ── Rating Modal ────────────────────────────────────────────────────── */
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 4, 3, 0.88);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 22px 20px 18px;
+      width: 100%;
+      animation: slideUp 0.22s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(12px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .modal-sub {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      font-style: italic;
+    }
+
+    .star-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      justify-content: center;
+    }
+
+    .star {
+      font-size: 26px;
+      cursor: pointer;
+      color: var(--star-off);
+      transition: color 0.1s, transform 0.1s;
+      user-select: none;
+      line-height: 1;
+    }
+
+    .star:hover, .star.selected { color: var(--star-on); }
+    .star:hover { transform: scale(1.15); }
+
+    .feedback-area { display: none; margin-bottom: 14px; }
+    .feedback-area.visible { display: block; }
+
+    .feedback-label {
+      font-size: 9.5px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .feedback-note { font-size: 8.5px; color: var(--text-dim); font-style: italic; margin-top: 4px; }
+
+    .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+
+    .btn-modal-submit {
+      background: var(--gold);
+      color: #0d0b08;
+      border: none;
+      border-radius: 3px;
+      padding: 9px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-modal-submit:hover:not(:disabled) { background: #d4b058; }
+    .btn-modal-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-modal-skip {
+      background: transparent;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 9px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .btn-modal-skip:hover { color: var(--text-muted); }
+
+    /* ── Username Setup Modal ────────────────────────────────────────────── */
+
+    #usernameModal .modal-card { text-align: center; }
+    #usernameModal .modal-sub  { margin-bottom: 14px; }
+
+    .username-input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .username-input-row input {
+      flex: 1;
+      margin: 0;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .btn-username-set {
+      background: var(--gold);
+      color: #0d0b08;
+      border: none;
+      border-radius: 3px;
+      padding: 8px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .btn-username-set:hover { background: #d4b058; }
+
+    .btn-username-skip {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-color: var(--text-dim);
+      text-underline-offset: 2px;
+      transition: color 0.15s;
+    }
+
+    .btn-username-skip:hover { color: var(--text-muted); }
+
+    /* ── Scrollbar ───────────────────────────────────────────────────────── */
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Toast Notification ───────────────────────────────────────────────── -->
+  <div class="toast" id="toast">
+    <span class="toast-icon">⚠️</span>
+    <span id="toastMsg">No Selection Detected: Please highlight the passage you want to refine.</span>
+  </div>
+
+  <!-- ── Rating Modal ─────────────────────────────────────────────────────── -->
+  <div class="modal-overlay" id="ratingModal">
+    <div class="modal-card">
+      <div class="modal-title">Enjoying InkSight?</div>
+      <div class="modal-sub">A quick rating helps improve the tool for every writer.</div>
+      <div class="star-row" id="starRow">
+        <span class="star" data-val="1">★</span>
+        <span class="star" data-val="2">★</span>
+        <span class="star" data-val="3">★</span>
+        <span class="star" data-val="4">★</span>
+        <span class="star" data-val="5">★</span>
+      </div>
+      <div class="feedback-area" id="feedbackArea">
+        <span class="feedback-label">What could be better?</span>
+        <textarea id="feedbackInput" rows="3"
+          placeholder="Any feature requests or issues? (optional)"></textarea>
+        <div class="feedback-note">This goes directly to the developer.</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal-submit" id="submitRatingBtn" disabled onclick="submitRating()">Submit</button>
+        <button class="btn-modal-skip" onclick="skipRating()">Maybe Later</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Username Setup Modal ──────────────────────────────────────────────── -->
+  <div class="modal-overlay" id="usernameModal">
+    <div class="modal-card">
+      <div class="modal-title">Welcome to InkSight ✦</div>
+      <div class="modal-sub">What should I call you?</div>
+      <div class="username-input-row">
+        <input type="text" id="usernameInput" placeholder="Your name or pen name…" maxlength="30">
+        <button class="btn-username-set" onclick="saveUsername()">Set</button>
+      </div>
+      <button class="btn-username-skip" onclick="skipUsername()">Skip for now</button>
+    </div>
+  </div>
+
+  <!-- ── Main Content ──────────────────────────────────────────────────────── -->
+  <div class="main-content">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-top">
+        <div class="header-left">
+          <span class="header-title">InkSight</span>
+          <div class="header-dot"></div>
+          <span class="header-sub">AI Writing Engine</span>
+        </div>
+        <div class="status-indicator">
+          <div class="status-dot" id="statusDot"></div>
+          <span class="status-label" id="statusLabel">—</span>
+        </div>
+      </div>
+      <div class="header-bottom">
+        <div class="header-greeting">
+          Welcome back, <span class="username" id="greetingName" onclick="promptRenameUser()" title="Click to change your name">—</span>
+        </div>
+        <div class="live-clock">
+          <div class="clock-time" id="clockTime">—</div>
+          <div id="clockDate">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Configuration (collapsible) -->
+    <button class="config-toggle" id="configToggle" onclick="toggleConfig()">
+      <span>⚙ &nbsp;Configuration</span>
+      <span class="config-arrow">▾</span>
+    </button>
+    <div class="config-body" id="configBody">
+      <input type="password" id="keyInput" placeholder="Paste Gemini API Key here…">
+      <button class="btn btn-save" onclick="saveKey()">Save Key</button>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+      <button class="tab-pill active" id="tab-creative" onclick="switchTab('creative')">
+        ✦ Creative
+      </button>
+      <button class="tab-pill" id="tab-academic" onclick="switchTab('academic')">
+        📚 Academic
+      </button>
+    </div>
+
+    <!-- ── Creative Tab Panel ─────────────────────────────────────────────── -->
+    <div class="tab-panel active" id="panel-creative">
+
+      <div class="section">
+        <div class="section-label">Storyteller Suite — highlight text first</div>
+        <div class="qa-grid">
+
+          <button class="qa-btn" onclick="runAction('sensory', 'Injecting sensory details')">
+            <span class="qa-icon">👁</span>
+            <span class="qa-label">Sensory Punch-up</span>
+            <span class="qa-hint">Sight, smell, sound, texture</span>
+          </button>
+
+          <button class="qa-btn" onclick="runAction('tension', 'Deepening the tension')">
+            <span class="qa-icon">⚡</span>
+            <span class="qa-label">Tension Deepener</span>
+            <span class="qa-hint">Dread, stakes, subtext</span>
+          </button>
+
+          <button class="qa-btn" onclick="runAction('dialogue', 'Diagnosing dialogue')">
+            <span class="qa-icon">💬</span>
+            <span class="qa-label">Dialogue Doctor</span>
+            <span class="qa-hint">Subtext, no filler</span>
+          </button>
+
+          <button class="qa-btn" onclick="runAction('cliffhanger', 'Forging the cliffhanger')">
+            <span class="qa-icon">🪝</span>
+            <span class="qa-label">Cliffhanger Generator</span>
+            <span class="qa-hint">3 high-stakes pivots</span>
+          </button>
+
+          <button class="qa-btn" onclick="runAction('monologue', 'Generating internal monologue')">
+            <span class="qa-icon">🧠</span>
+            <span class="qa-label">Internal Monologue</span>
+            <span class="qa-hint">Character's hidden thoughts</span>
+          </button>
+
+          <button class="qa-btn" onclick="runAction('pov', 'Flipping point of view')">
+            <span class="qa-icon">🔄</span>
+            <span class="qa-label">POV Flip</span>
+            <span class="qa-hint">First ↔ third person</span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Custom Prompt — Creative -->
+      <div class="or-divider">or write a custom prompt</div>
+
+      <div class="section">
+        <div class="section-label">Expert Persona</div>
+        <textarea id="persona" rows="2"
+          placeholder="e.g. You are a gritty thriller editor specialising in psychological dread…"></textarea>
+
+        <div class="section-label" style="margin-top:11px;">Instructions</div>
+        <textarea id="prompt" rows="3"
+          placeholder="What do you need help with? (highlight text in doc for context)"></textarea>
+
+        <button id="runBtn" class="btn btn-primary" style="margin-top:9px;" onclick="runCustom()">
+          Help Me Write
+        </button>
+      </div>
+
+    </div><!-- /.panel-creative -->
+
+    <!-- ── Academic Tab Panel ─────────────────────────────────────────────── -->
+    <div class="tab-panel" id="panel-academic">
+
+      <div class="section">
+        <div class="section-label">Student Suite — highlight text first</div>
+        <div class="qa-grid">
+
+          <button class="qa-btn academic" onclick="runAction('formalizer', 'Formalizing the passage')">
+            <span class="qa-icon">🎓</span>
+            <span class="qa-label">Academic Formalizer</span>
+            <span class="qa-hint">Casual → peer-reviewed prose</span>
+          </button>
+
+          <button class="qa-btn academic" onclick="runAction('defluffer', 'De-fluffing the passage')">
+            <span class="qa-icon">✂️</span>
+            <span class="qa-label">De-Fluffer</span>
+            <span class="qa-hint">Cuts wordiness & filler</span>
+          </button>
+
+          <button class="qa-btn academic" onclick="runAction('critic', 'Reviewing critically')">
+            <span class="qa-icon">🔍</span>
+            <span class="qa-label">Critical Reviewer</span>
+            <span class="qa-hint">3 improvement points</span>
+          </button>
+
+          <button class="qa-btn academic" onclick="runAction('summarizer', 'Summarizing source')">
+            <span class="qa-icon">📄</span>
+            <span class="qa-label">Source Summarizer</span>
+            <span class="qa-hint">3-sentence citation summary</span>
+          </button>
+
+          <button class="qa-btn academic" onclick="runAction('tldr', 'Generating TL;DR')">
+            <span class="qa-icon">⚡</span>
+            <span class="qa-label">TL;DR Generator</span>
+            <span class="qa-hint">Concise abstract</span>
+          </button>
+
+          <button class="qa-btn academic" onclick="runAction('counterarg', 'Building counter-arguments')">
+            <span class="qa-icon">⚖️</span>
+            <span class="qa-label">Counter-Argument</span>
+            <span class="qa-hint">1–2 evidence-based critiques</span>
+          </button>
+
+        </div>
+      </div>
+
+    </div><!-- /.panel-academic -->
+
+    <!-- Loader (shared) -->
+    <div class="loader" id="loader">
+      <span id="loaderText">InkSight is thinking</span><span class="loader-dots"></span>
+    </div>
+
+    <!-- Output (shared) -->
+    <div id="outputSection" style="display:none;" class="section">
+      <div class="section-label">Output</div>
+      <div class="output-box" id="output"></div>
+      <div class="output-actions">
+        <button class="btn btn-ghost" onclick="copyOutput()">📋 &nbsp;Copy</button>
+        <button class="btn btn-ghost" onclick="insertToDoc()">📄 &nbsp;Insert to Doc</button>
+      </div>
+      <div id="actionStatus" style="min-height:20px;"></div>
+    </div>
+
+  </div><!-- /.main-content -->
+
+  <!-- ── Counter bar ───────────────────────────────────────────────────────── -->
+  <div class="counter-bar">
+    <span class="counter-label">Total Generations</span>
+    <div class="counter-right">
+      <span class="counter-sub">Free Tier · 10 RPM</span>
+      <span class="counter-val" id="count">—</span>
+    </div>
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────────────────────── -->
+  <div class="footer">
+    <span class="footer-text">
+      Developed with <span class="heart">❤️</span> by <span class="name">Ronel Jonathan</span> &nbsp;|&nbsp; v2.0 Build
+    </span>
+  </div>
+
+  <script>
+    // ── State ──────────────────────────────────────────────────────────────
+    let selectedRating = 0;
+    let currentUsername = '';
+
+    // ── Init ──────────────────────────────────────────────────────────────
+
+    window.onload = function () {
+      startClock();
+
+      // Status ping — green dot if server responds, red if not
+      google.script.run
+        .withSuccessHandler(function () {
+          var dot   = document.getElementById('statusDot');
+          var label = document.getElementById('statusLabel');
+          dot.classList.add('online');
+          label.innerText = 'Live';
+        })
+        .withFailureHandler(function () {
+          var dot   = document.getElementById('statusDot');
+          var label = document.getElementById('statusLabel');
+          dot.classList.add('offline');
+          label.innerText = 'Error';
+        })
+        .pingStatus();
+
+      // Main init data — count, rating flag, username
+      google.script.run
+        .withSuccessHandler(function (data) {
+          document.getElementById('count').innerText = data.count;
+
+          // Set greeting name
+          currentUsername = data.username || 'Writer';
+          document.getElementById('greetingName').innerText = currentUsername;
+
+          // First-time user — show username setup modal after short delay
+          if (data.isNewUser) {
+            setTimeout(function () {
+              document.getElementById('usernameInput').value = data.username || '';
+              document.getElementById('usernameModal').classList.add('active');
+            }, 600);
+          }
+
+          // Rating modal — only if no username modal is showing
+          if (data.showRating && !data.isNewUser) {
+            setTimeout(openRatingModal, 1000);
+          }
+        })
+        .withFailureHandler(function () {
+          document.getElementById('count').innerText = '—';
+          document.getElementById('greetingName').innerText = 'Writer';
+        })
+        .getSidebarInitData();
+    };
+
+    // ── Live Clock ─────────────────────────────────────────────────────────
+
+    function startClock() {
+      function tick() {
+        var now  = new Date();
+        var h    = now.getHours().toString().padStart(2, '0');
+        var m    = now.getMinutes().toString().padStart(2, '0');
+        var s    = now.getSeconds().toString().padStart(2, '0');
+        var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        var mons = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        document.getElementById('clockTime').innerText = h + ':' + m + ':' + s;
+        document.getElementById('clockDate').innerText =
+          days[now.getDay()] + ', ' + mons[now.getMonth()] + ' ' + now.getDate();
+      }
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    // ── Tab switching ──────────────────────────────────────────────────────
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-pill').forEach(function (p) { p.classList.remove('active'); });
+      document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('panel-' + tab).classList.add('active');
+      // Hide output when switching tabs
+      document.getElementById('outputSection').style.display = 'none';
+    }
+
+    // ── Config panel ───────────────────────────────────────────────────────
+
+    function toggleConfig() {
+      document.getElementById('configToggle').classList.toggle('open');
+      document.getElementById('configBody').classList.toggle('open');
+    }
+
+    function saveKey() {
+      var key = document.getElementById('keyInput').value.trim();
+      if (!key) return showToast('Please paste your Gemini API key first.');
+
+      google.script.run
+        .withSuccessHandler(function (msg) {
+          showStatus(msg, msg.startsWith('Error') ? 'error' : 'success');
+          document.getElementById('keyInput').value = '';
+          document.getElementById('configToggle').classList.remove('open');
+          document.getElementById('configBody').classList.remove('open');
+        })
+        .saveSettings(key);
+    }
+
+    // ── Toast Notification ─────────────────────────────────────────────────
+
+    var toastTimer = null;
+
+    function showToast(msg) {
+      var el = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      el.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { el.classList.remove('show'); }, 3200);
+    }
+
+    // ── Loading state ──────────────────────────────────────────────────────
+
+    function setLoading(label, on) {
+      document.getElementById('loaderText').innerText = label || 'InkSight is thinking';
+      document.getElementById('loader').classList.toggle('active', on);
+      var btn = document.getElementById('runBtn');
+      if (btn) btn.disabled = on;
+      if (on) document.getElementById('outputSection').style.display = 'none';
+    }
+
+    // ── Output renderer ────────────────────────────────────────────────────
+
+    function showOutput(res) {
+      document.getElementById('output').innerText = res.text;
+      document.getElementById('count').innerText  = res.count;
+      document.getElementById('outputSection').style.display = 'block';
+      document.getElementById('actionStatus').innerHTML = '';
+      setLoading('', false);
+    }
+
+    function handleFailure(err) {
+      showStatus('Error: ' + (err.message || err), 'error');
+      setLoading('', false);
+    }
+
+    // ── Selection-First Guard ──────────────────────────────────────────────
+    // Client-side check before any server call. Fires toast if no selection.
+
+    function withSelectionCheck(callback) {
+      google.script.run
+        .withSuccessHandler(function (selectedText) {
+          if (!selectedText || selectedText.trim() === '') {
+            showToast('⚠️ No Selection Detected: Please highlight the passage you want to refine.');
+            setLoading('', false);
+            return;
+          }
+          callback(selectedText);
+        })
+        .withFailureHandler(handleFailure)
+        .getSelectedText();
+    }
+
+    // ── Action Runners ─────────────────────────────────────────────────────
+
+    function runAction(key, loaderLabel) {
+      setLoading(loaderLabel, true);
+      withSelectionCheck(function (selectedText) {
+        google.script.run
+          .withSuccessHandler(showOutput)
+          .withFailureHandler(handleFailure)
+          .callQuickAction(key, selectedText);
+      });
+    }
+
+    function runCustom() {
+      var persona = document.getElementById('persona').value;
+      var prompt  = document.getElementById('prompt').value.trim();
+      if (!prompt) return showToast('Please enter your instructions first.');
+
+      setLoading('InkSight is thinking', true);
+
+      withSelectionCheck(function (selectedText) {
+        // Custom prompt allows empty selection (persona + prompt alone is valid)
+        google.script.run
+          .withSuccessHandler(showOutput)
+          .withFailureHandler(handleFailure)
+          .callGemini(prompt, persona, selectedText);
+      });
+    }
+
+    // ── Output Actions ─────────────────────────────────────────────────────
+
+    function copyOutput() {
+      var text = document.getElementById('output').innerText;
+      if (!text) return;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(function ()  { showStatus('Copied to clipboard', 'success'); })
+          .catch(function () { execCommandCopy(text); });
+      } else {
+        execCommandCopy(text);
+      }
+    }
+
+    function execCommandCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity  = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showStatus('Copied to clipboard', 'success');
+      } catch (e) {
+        showStatus('Copy failed — select text manually', 'error');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function insertToDoc() {
+      var text = document.getElementById('output').innerText;
+      if (!text) return;
+
+      google.script.run
+        .withSuccessHandler(function (msg) {
+          showStatus(msg, msg.startsWith('Insert Error') ? 'error' : 'success');
+        })
+        .withFailureHandler(function (err) {
+          showStatus('Insert failed: ' + (err.message || err), 'error');
+        })
+        .insertTextToDoc(text);
+    }
+
+    function showStatus(msg, type) {
+      var el = document.getElementById('actionStatus');
+      el.innerHTML = '<span class="status-tag tag-' + type + '">' + msg + '</span>';
+      setTimeout(function () { el.innerHTML = ''; }, 3000);
+    }
+
+    // ── Username Modal ─────────────────────────────────────────────────────
+
+    function saveUsername() {
+      var name = document.getElementById('usernameInput').value.trim();
+      if (!name) return showToast('Please enter a name first.');
+
+      google.script.run
+        .withSuccessHandler(function (savedName) {
+          currentUsername = savedName;
+          document.getElementById('greetingName').innerText = savedName;
+          document.getElementById('usernameModal').classList.remove('active');
+        })
+        .setUsername(name);
+    }
+
+    function skipUsername() {
+      document.getElementById('usernameModal').classList.remove('active');
+    }
+
+    function promptRenameUser() {
+      document.getElementById('usernameInput').value = currentUsername;
+      document.getElementById('usernameModal').classList.add('active');
+    }
+
+    // ── Rating Modal ───────────────────────────────────────────────────────
+
+    function openRatingModal() {
+      selectedRating = 0;
+      resetStars();
+      document.getElementById('feedbackArea').classList.remove('visible');
+      document.getElementById('feedbackInput').value = '';
+      document.getElementById('submitRatingBtn').disabled = true;
+      document.getElementById('ratingModal').classList.add('active');
+    }
+
+    function skipRating() {
+      document.getElementById('ratingModal').classList.remove('active');
+    }
+
+    function submitRating() {
+      if (!selectedRating) return;
+      var feedback = document.getElementById('feedbackInput').value;
+      document.getElementById('ratingModal').classList.remove('active');
+      google.script.run
+        .withSuccessHandler(function (msg) { showStatus(msg, 'success'); })
+        .logRating(selectedRating, feedback);
+    }
+
+    document.getElementById('starRow').addEventListener('click', function (e) {
+      var star = e.target.closest('.star');
+      if (!star) return;
+
+      selectedRating = parseInt(star.dataset.val);
+      highlightStars(selectedRating);
+      document.getElementById('submitRatingBtn').disabled = false;
+
+      var area = document.getElementById('feedbackArea');
+      if (selectedRating < 5) {
+        area.classList.add('visible');
+      } else {
+        area.classList.remove('visible');
+        document.getElementById('feedbackInput').value = '';
+      }
+    });
+
+    document.getElementById('starRow').addEventListener('mouseover', function (e) {
+      var star = e.target.closest('.star');
+      if (!star) return;
+      highlightStars(parseInt(star.dataset.val));
+    });
+
+    document.getElementById('starRow').addEventListener('mouseleave', function () {
+      highlightStars(selectedRating);
+    });
+
+    function highlightStars(upTo) {
+      document.querySelectorAll('.star').forEach(function (s) {
+        s.classList.toggle('selected', parseInt(s.dataset.val) <= upTo);
+      });
+    }
+
+    function resetStars() {
+      document.querySelectorAll('.star').forEach(function (s) { s.classList.remove('selected'); });
+    }
+
+    // Enter key in username input
+    document.getElementById('usernameInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') saveUsername();
+    });
+  </script>
+</body>
+</html>
