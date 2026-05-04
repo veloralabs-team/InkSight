@@ -57,7 +57,9 @@ const cleanText = aiResponse
   .replace(/#/g, '')     // Removes Headings
   .replace(/>/g, '');    // Removes Blockquotes
 ```
-
+## ⚡ Performance & API Limits
+- **The "High Demand" Bug**: Occasionally, Google's servers experience spikes in traffic. If you see a "High Demand" message, simply wait 30 seconds and try again.
+- **Pro-tip (Stable Connection)**: For the most reliable experience, I recommend using your own Google AI Studio API Key in the settings. This bypasses the shared public quota and ensures your writing flow remains uninterrupted.
 ---
 
 ## 🔐 Privacy & Security
